@@ -1,5 +1,6 @@
 name: Deploy to VM
 
+
 on:
   push:
     branches:
@@ -17,7 +18,7 @@ jobs:
           # Example for Python
           python -m venv venv
           venv/bin/pip install -r requirements.txt
-        
+          
       - name: Deploy to VM
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -25,21 +26,21 @@ jobs:
           username: ${{ secrets.VM_USERNAME }}
           password: ${{ secrets.VM_PASSWORD }}
           script: |
-            #  Commands to:
-            #  1.  Stop any existing process on port 80
-            #  2.  Copy new files
-            #  3.  Start the API (e.g., using nohup to keep it running)
-            #  Example (adapt to your needs):
-            #  sudo fuser -k 80/tcp  
-            #  mkdir -p /var/www/myapi
-            #  cp -r * /var/www/myapi
-            #  cd /var/www/myapi
-            #  nohup python app.py &
+            # Commands to:
+            # 1. Stop any existing process on port 80
+            # 2. Copy new files
+            # 3. Start the API (e.g., using nohup to keep it running)
+            # Example (adapt to your needs):
+            # sudo fuser -k 80/tcp  
+            # mkdir -p /var/www/myapi
+            # cp -r * /var/www/myapi
+            # cd /var/www/myapi
+            # nohup python app.py &
 
       - name: Send notification on failure
-  if: ${{ failure() }}
-  uses: actions/github-script@v6
-    with:
-      script: |
-        console.log('Deployment to VM failed!');
-      // Add your notification logic here (e.g., send an email or Slack message)
+        if: ${{ failure() }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.log('Deployment to VM failed!');
+            // Add your notification logic here (e.g., send an email or Slack message)
