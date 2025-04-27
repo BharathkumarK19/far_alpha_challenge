@@ -37,10 +37,4 @@ jobs:
             # cd /var/www/myapi
             # nohup python app.py &
 
-      - name: Send notification on failure
-        if: ${{ failure() }}
-        uses: actions/github-script@v6
-        with:
-           script: |
-               console.log('Deployment to VM failed!');
-            
+    
