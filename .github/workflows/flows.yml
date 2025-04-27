@@ -41,6 +41,6 @@ jobs:
         if: ${{ failure() }}
         uses: actions/github-script@v6
         with:
-          script: |
-            console.log('Deployment to VM failed!');
-            // Add your notification logic here (e.g., send an email or Slack message)
+           script: |
+               console.log('Deployment to VM failed!');
+            
