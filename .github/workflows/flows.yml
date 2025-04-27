@@ -1,0 +1,45 @@
+name: Deploy to VM
+
+on:
+  push:
+    branches:
+      - master # or main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          # Example for Python
+          python -m venv venv
+          venv/bin/pip install -r requirements.txt
+        
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          password: ${{ secrets.VM_PASSWORD }}
+          script: |
+            #  Commands to:
+            #  1.  Stop any existing process on port 80
+            #  2.  Copy new files
+            #  3.  Start the API (e.g., using nohup to keep it running)
+            #  Example (adapt to your needs):
+            #  sudo fuser -k 80/tcp  
+            #  mkdir -p /var/www/myapi
+            #  cp -r * /var/www/myapi
+            #  cd /var/www/myapi
+            #  nohup python app.py &
+
+      - name: Send notification on failure
+  if: ${{ failure() }}
+  uses: actions/github-script@v6
+    with:
+      script: |
+        console.log('Deployment to VM failed!');
+      // Add your notification logic here (e.g., send an email or Slack message)
